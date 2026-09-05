@@ -1,1 +1,16 @@
 *.ipynb
+.gitignore
+__pycache__
+chroma_db_strategy
+chroma_strategy
+strategyqa-cot-qlora-final
+check.ipynb
+eval.py
+Knowledge_Base.py
+llm_run.ipynb
+new.ipynb
+.gitignore
+results_config1.json
+results_config2.json
+results_config3.json
+test.ipynb
