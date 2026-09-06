@@ -8,7 +8,7 @@ import json
 import numpy as np
 
 from datasets import load_dataset, ClassLabel, DatasetDict
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 import chromadb
 
 from transformers import (
@@ -61,15 +61,29 @@ def load_retriever():
     client = chromadb.PersistentClient(path=CHROMA_PATH)
     collection = client.get_collection(COLLECTION_NAME)
     print(f"ChromaDB loaded: {collection.count()} chunks")
-    return embedder, collection
+    
+    print("Loading reranker...")
+    reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+    print("Reranker ready.")
+    
+    return embedder, collection, reranker
 
-def retrieve(question, collection, embedder):
+def retrieve(question, collection, embedder, reranker=None, candidates=20):
     embedded = embedder.encode([question]).tolist()
     results = collection.query(
         query_embeddings=embedded,
-        n_results=TOP_K
+        n_results=candidates if reranker else TOP_K
     )
-    return "\n\n".join(results["documents"][0])
+    candidate_docs = results['documents'][0]
+    
+    if reranker is None:
+        return "\n\n".join(candidate_docs[:TOP_K])
+    
+    pairs = [[question, doc] for doc in candidate_docs]
+    scores = reranker.predict(pairs)
+    ranked = sorted(zip(scores, candidate_docs), reverse=True)
+    top_docs = [doc for _, doc in ranked[:TOP_K]]
+    return "\n\n".join(top_docs)
 
 def get_bnb_config():
     return BitsAndBytesConfig(
@@ -193,7 +207,7 @@ def predict(model, tokenizer, prompt):
     else:
         return "unknown"
 
-def run_eval(config_name, test_data, tokenizer, model, collection=None, embedder=None, retrieval = False, finetuned = False):
+def run_eval(config_name, test_data, tokenizer, model, collection=None, embedder=None, reranker = None, retrieval = False, finetuned = False):
     print(f"\n{'='*60}")
     print(f"Running: {config_name}")
     print(f"{'='*60}")
@@ -202,7 +216,7 @@ def run_eval(config_name, test_data, tokenizer, model, collection=None, embedder
 
     for i, example in enumerate(test_data):
         if retrieval:
-            context = retrieve(example["question"], collection, embedder)
+            context = retrieve(example["question"], collection, embedder, reranker)
             prompt = create_eval_prompt(example["question"], context, finetuned)
         else:
             prompt = create_eval_prompt(example['question'])

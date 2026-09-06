@@ -10,7 +10,7 @@ results = run_eval(
     tokenizer=tokenizer,
     test_data=test_data,
 )
-with open("results_config_1.json", "w") as f:
+with open("./results/results_config_1.json", "w") as f:
     json.dump(results, f, indent=2)
 
 unload_model(model)

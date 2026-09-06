@@ -1,0 +1,40 @@
+{
+  "config": "Config 3: Finetuned LLM + RAG",
+  "report": {
+    "yes": {
+      "precision": 0.6571428571428571,
+      "recall": 0.42990654205607476,
+      "f1-score": 0.519774011299435,
+      "support": 214.0
+    },
+    "no": {
+      "precision": 0.6163522012578616,
+      "recall": 0.8032786885245902,
+      "f1-score": 0.697508896797153,
+      "support": 244.0
+    },
+    "accuracy": 0.62882096069869,
+    "macro avg": {
+      "precision": 0.6367475292003594,
+      "recall": 0.6165926152903325,
+      "f1-score": 0.6086414540482941,
+      "support": 458.0
+    },
+    "weighted avg": {
+      "precision": 0.6354115906888421,
+      "recall": 0.62882096069869,
+      "f1-score": 0.6144624655820621,
+      "support": 458.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      92,
+      122
+    ],
+    [
+      48,
+      196
+    ]
+  ]
+}

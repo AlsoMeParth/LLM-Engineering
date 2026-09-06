@@ -2,9 +2,9 @@
 import json
 
 files = {
-    "Config 1": "results_config_1.json",
-    "Config 2": "results_config_2.json",
-    "Config 3": "results_config_3.json"
+    "Config 1": "./results/results_config_1.json",
+    "Config 2": "./results/results_config_2.json",
+    "Config 3": "./results/results_config_3.json"
 }
 
 print(f"\n{'='*75}")

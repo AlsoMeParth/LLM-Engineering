@@ -3,7 +3,7 @@ import json
 from utils import load_test_data, load_base_model, load_retriever, unload_model, run_eval
 
 test_data = load_test_data()
-embedder, collection = load_retriever()
+embedder, collection, reranker = load_retriever()
 model, tokenizer = load_base_model()
 
 results = run_eval(
@@ -13,10 +13,11 @@ results = run_eval(
         test_data=test_data,
         collection=collection,
         embedder=embedder,
+        reranker=reranker,
         retrieval=True,
 )
 
-with open("results_config_2.json", "w") as f:
+with open("./results/results_config_2.json", "w") as f:
     json.dump(results, f, indent=2)
 
 unload_model(model)

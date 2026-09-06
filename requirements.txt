@@ -1,0 +1,23 @@
+# Core ML/DL
+torch==2.5.1+cu121
+transformers==5.15.0
+peft==0.20.0
+trl==1.10.0
+accelerate==1.14.0
+bitsandbytes==0.50.1
+
+# Dataset
+datasets==5.0.1
+huggingface_hub>=0.30.0
+
+# RAG Pipeline
+sentence-transformers==6.0.0
+chromadb==1.5.9
+rank-bm25==0.2.2
+
+# Evaluation
+scikit-learn==1.7.2
+numpy>=1.26.0
+
+# Utilities
+psutil>=5.9.0
